@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from config import token
 from logic import Pokemon , Wizard, Fighter
+
 import random
 # Setting up intents for the bot
 intents = discord.Intents.default()  # Getting the default settings
@@ -55,4 +56,21 @@ async def attack(ctx):
             await ctx.send("Kedua player harus memiliki Pokémon untuk memulai pertempuran!")  # Mengumumkan bahwa setidaknya salah satu petarung tidak memiliki Pokémon 
     else:
         await ctx.send("Tentukan pengguna yang ingin Kalian serang dengan menyebut mereka.")  # Meminta untuk menyebutkan pengguna untuk menyerang
+
+@bot.command()
+async def info(ctx):
+    if ctx.author.name in Pokemon.pokemons:
+        pok = Pokemon.pokemons[ctx.author.name]
+        await ctx.send(f" Informasi Pokémon milikmu:\n{await pok.info()}")
+    else:
+        await ctx.send(" Kamu belum memiliki Pokémon. Gunakan perintah !go untuk mendapatkannya!")
+@bot.command()
+async def feed(ctx):
+    author = ctx.author.name
+    if author in Pokemon.pokemons:
+        pokemon = Pokemon.pokemons[author]
+        result = await pokemon.feed()
+        await ctx.send(result)
+    else:
+        ctx.send("Belum ada pokemon coba !go")
 bot.run(token)
